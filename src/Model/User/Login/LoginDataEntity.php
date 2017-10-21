@@ -3,7 +3,7 @@
 namespace InstagramApp\Model\User\Login;
 
 use InstagramApp\Model\AbstractModel;
-use InstagramApp\Model\User\Marked\UserMarkedEntity;
+use InstagramApp\Model\User\UserDefaultEntity;
 
 /**
  * Class UserLoginEntity
@@ -14,7 +14,7 @@ class LoginDataEntity extends AbstractModel
     /** @var string */
     protected $accessToken;
 
-    /** @var UserMarkedEntity */
+    /** @var UserDefaultEntity */
     protected $user;
 
     /**
@@ -34,20 +34,20 @@ class LoginDataEntity extends AbstractModel
     }
 
     /**
-     * @return UserMarkedEntity
+     * @return UserDefaultEntity
      */
-    public function getUser(): UserMarkedEntity
+    public function getUser(): UserDefaultEntity
     {
         return $this->user;
     }
 
     /**
-     * @param UserMarkedEntity | array $user
+     * @param UserDefaultEntity | array $user
      */
     public function setUser($user)
     {
-        if (!$user instanceof UserMarkedEntity) {
-            $user = new UserMarkedEntity($user);
+        if (!$user instanceof UserDefaultEntity) {
+            $user = new UserDefaultEntity($user);
         }
 
         $this->user = $user;

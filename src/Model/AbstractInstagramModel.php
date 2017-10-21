@@ -1,12 +1,10 @@
 <?php
 
-namespace InstagramApp\Model\Response;
-
-use InstagramApp\Model\AbstractModel;
+namespace InstagramApp\Model;
 
 /**
  * Class AbstractInstagramResponse
- * @package InstagramApp\Response
+ * @package InstagramApp
  */
 abstract class AbstractInstagramModel extends AbstractModel
 {
@@ -15,6 +13,10 @@ abstract class AbstractInstagramModel extends AbstractModel
      */
     public function exchangeArray(array $array)
     {
-        parent::exchangeArray($array['data']);
+        if (isset($array['data']) && is_array($array['data'])) {
+            $array = $array['data'];
+        }
+
+        parent::exchangeArray($array);
     }
 }

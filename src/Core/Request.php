@@ -19,10 +19,7 @@ abstract class Request
     const ACTION_UNBLOCK  = 'unblock';
     const ACTION_UNFOLLOW = 'unfollow';
 
-    const SCOPE_BASIC         = 'basic';
-    const SCOPE_COMMENTS      = 'comments';
-    const SCOPE_LIKES         = 'likes';
-    const SCOPE_RELATIONSHIPS = 'relationships';
+    const SCOPE_PUBLIC_CONTENT = 'public_content';
 
     const RESPONSE_CODE_COMPLETED = 200;
 
@@ -58,10 +55,7 @@ abstract class Request
      * @var array
      */
     private $scopes = [
-        self::SCOPE_BASIC,
-        self::SCOPE_LIKES,
-        self::SCOPE_COMMENTS,
-        self::SCOPE_RELATIONSHIPS,
+        self::SCOPE_PUBLIC_CONTENT,
     ];
 
     /**
@@ -87,15 +81,15 @@ abstract class Request
     }
 
     /**
-     * @param string $action
+     * @param mixed  $action
+     * @param bool   $auth
      * @param array  $params
      * @param string $method
-     * @param bool   $auth
      *
      * @return array
      */
     public function makeRequest(
-        string $action,
+        $action,
         bool $auth = false,
         array $params = [],
         string $method = Requester::REQUEST_TYPE_GET

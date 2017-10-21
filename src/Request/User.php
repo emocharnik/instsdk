@@ -5,7 +5,7 @@ namespace InstagramApp\Request;
 use InstagramApp\Core\Request;
 use InstagramApp\Model\Media\Collection\MediaCollection;
 use InstagramApp\Model\User\Collection\UsersSearch;
-use InstagramApp\Model\User\UserEntity;
+use InstagramApp\Model\User\UserExtendedEntity;
 
 /**
  * Class User
@@ -38,13 +38,13 @@ class User extends Request
      *
      * @param integer [optional] $id Instagram user ID
      *
-     * @return UserEntity
+     * @return UserExtendedEntity
      */
-    public function getUser($id = 0): UserEntity
+    public function getUser($id = 0): UserExtendedEntity
     {
         $id = $this->resolveUserId($id);
 
-        return new UserEntity($this->makeRequest($id, $this->isAuthRequired()));
+        return new UserExtendedEntity($this->makeRequest($id, $this->isAuthRequired()));
     }
 
     /**

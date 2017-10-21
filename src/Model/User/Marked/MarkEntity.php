@@ -2,35 +2,36 @@
 
 namespace InstagramApp\Model\User\Marked;
 
-use InstagramApp\Model\AbstractModel;
+use InstagramApp\Model\AbstractInstagramModel;
+use InstagramApp\Model\User\UserDefaultEntity;
 
 /**
  * Class MarkEntity
  * @package InstagramApp\Model\User\Marked
  */
-class MarkEntity extends AbstractModel
+class MarkEntity extends AbstractInstagramModel
 {
-    /** @var UserMarkedEntity */
+    /** @var UserDefaultEntity */
     protected $user;
 
     /** @var PositionEntity */
     protected $position;
 
     /**
-     * @return UserMarkedEntity
+     * @return UserDefaultEntity
      */
-    public function getUser(): UserMarkedEntity
+    public function getUser(): UserDefaultEntity
     {
         return $this->user;
     }
 
     /**
-     * @param UserMarkedEntity | array $user
+     * @param UserDefaultEntity | array $user
      */
     public function setUser($user)
     {
-        if (!$user instanceof UserMarkedEntity) {
-            $user = new UserMarkedEntity($user);
+        if (!$user instanceof UserDefaultEntity) {
+            $user = new UserDefaultEntity($user);
         }
 
         $this->user = $user;

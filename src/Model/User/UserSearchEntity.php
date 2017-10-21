@@ -2,7 +2,7 @@
 
 namespace InstagramApp\Model\User;
 
-use InstagramApp\Model\Response\AbstractInstagramModel;
+use InstagramApp\Model\AbstractInstagramModel;
 
 /**
  * Class UserSearchEntity

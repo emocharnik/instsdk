@@ -2,13 +2,13 @@
 
 namespace InstagramApp\Model\User;
 
-use InstagramApp\Model\AbstractModel;
+use InstagramApp\Model\AbstractInstagramModel;
 
 /**
  * Class UserShortIntoEntity
  * @package InstagramApp\Model\User
  */
-class UserShortInfoEntity extends AbstractModel
+class UserShortInfoEntity extends AbstractInstagramModel
 {
     /** @var int */
     protected $id;

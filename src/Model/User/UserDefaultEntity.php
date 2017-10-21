@@ -1,14 +1,12 @@
 <?php
 
-namespace InstagramApp\Model\User\Marked;
-
-use InstagramApp\Model\User\UserShortInfoEntity;
+namespace InstagramApp\Model\User;
 
 /**
  * Class UserMarkedEntity
  * @package InstagramApp\Model\User\Marked
  */
-class UserMarkedEntity extends UserShortInfoEntity
+class UserDefaultEntity extends UserShortInfoEntity
 {
     /** @var string */
     protected $full_name;

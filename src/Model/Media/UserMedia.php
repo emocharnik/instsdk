@@ -3,8 +3,8 @@
 namespace InstagramApp\Model\Media;
 
 use DateTime;
-use InstagramApp\Model\AbstractModel;
 use InstagramApp\Model\Location\LocationEntity;
+use InstagramApp\Model\AbstractInstagramModel;
 use InstagramApp\Model\User\Caption\MediaCaptionEntity;
 use InstagramApp\Model\User\Collection\UsersMarkedCollection;
 use InstagramApp\Model\User\UserShortInfoEntity;
@@ -13,7 +13,7 @@ use InstagramApp\Model\User\UserShortInfoEntity;
  * Class UserMedia
  * @package InstagramApp\Model\User
  */
-class UserMedia extends AbstractModel
+class UserMedia extends AbstractInstagramModel
 {
     /** @var int */
     protected $id;

@@ -40,7 +40,7 @@ class AuthTest extends TestCase
         $apiKey      = 'API_KEY';
         $callbackUrl = 'CALLBACK_URL';
         $expectedUrl = 'https://api.instagram.com/oauth/authorize?client_id=API_KEY&redirect_uri=CALLBACK_URL' .
-            '&scope=basic&response_type=code';
+            '&scope=public_content&response_type=code';
 
         $requester = $this->createMock(Requester::class);
         $config    = $this->createMock(BaseConfig::class);

@@ -22,16 +22,21 @@ class InstagramApp implements RequestsInterface
     /** @var Requester */
     protected $requester;
 
+    /** @var string */
+    protected $token;
+
     /**
      * InstagramApp constructor.
      *
      * @param array     $config
      * @param Requester $requester
+     * @param string    $token
      */
-    public function __construct(array $config, Requester $requester)
+    public function __construct(array $config, Requester $requester, string $token = '')
     {
         $this->config = new BaseConfig($config);
         $this->setRequester($requester);
+        $this->token = $token;
     }
 
     /**
@@ -39,7 +44,10 @@ class InstagramApp implements RequestsInterface
      */
     public function getAuth(): Auth
     {
-        return new Auth($this->getConfig(), $this->getRequester());
+        $resource = new Auth($this->getConfig(), $this->getRequester());
+        $resource->setAccessToken($this->getToken());
+
+        return $resource;
     }
 
     /**
@@ -47,7 +55,10 @@ class InstagramApp implements RequestsInterface
      */
     public function getLikes(): Likes
     {
-        return new Likes($this->getConfig(), $this->getRequester());
+        $likes = new Likes($this->getConfig(), $this->getRequester());
+        $likes->setAccessToken($this->getToken());
+
+        return $likes;
     }
 
     /**
@@ -55,7 +66,10 @@ class InstagramApp implements RequestsInterface
      */
     public function getMedia(): Media
     {
-        return new Media($this->getConfig(), $this->getRequester());
+        $media = new Media($this->getConfig(), $this->getRequester());
+        $media->setAccessToken($this->getToken());
+
+        return $media;
     }
 
     /**
@@ -63,7 +77,10 @@ class InstagramApp implements RequestsInterface
      */
     public function getUser(): User
     {
-        return new User($this->getConfig(), $this->getRequester());
+        $user = new User($this->getConfig(), $this->getRequester());
+        $user->setAccessToken($this->getToken());
+
+        return $user;
     }
 
     /**
@@ -88,5 +105,13 @@ class InstagramApp implements RequestsInterface
     public function setRequester(Requester $requester)
     {
         $this->requester = $requester;
+    }
+
+    /**
+     * @return string
+     */
+    public function getToken(): string
+    {
+        return $this->token;
     }
 }

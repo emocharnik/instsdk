@@ -37,7 +37,7 @@ class Likes extends Media
      */
     public function likeMedia(int $id)
     {
-        $action   = $id . self::ACTION_LIKES;
+        $action   = $id . '/' . self::ACTION_LIKES;
         $response = $this->makeRequest($action, true, [], Requester::REQUEST_TYPE_POST);
 
         return $response['code'] == self::RESPONSE_CODE_COMPLETED;
@@ -52,7 +52,7 @@ class Likes extends Media
      */
     public function deleteLikedMedia(int $id)
     {
-        $action   = $id . self::ACTION_LIKES;
+        $action   = $id . '/' . self::ACTION_LIKES;
         $response = $this->makeRequest($action, true, [], Requester::REQUEST_TYPE_DELETE);
 
         return $response['code'] == self::RESPONSE_CODE_COMPLETED;

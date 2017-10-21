@@ -9,7 +9,7 @@ use InstagramApp\Model\Media\UserMedia;
  * Class UsersResent
  * @package InstagramApp\Model\User\Collection
  */
-class MediaCollection extends AbstractInstagramCollection
+class MediaCollection extends AbstractInstagramCollection implements \Countable
 {
     /** @var UserMedia[] */
     protected $userMedia;
@@ -37,5 +37,13 @@ class MediaCollection extends AbstractInstagramCollection
     public function getUserMedia(): array
     {
         return $this->userMedia;
+    }
+
+    /**
+     * @return int
+     */
+    public function count()
+    {
+        return count($this->getUserMedia());
     }
 }

@@ -52,9 +52,7 @@ class Media extends Request
      */
     public function getMedia($id): MediaCollection
     {
-        $this->resolveUserId($id);
-
-        $response = $this->makeRequest($id, $this->isAuthRequired());
+        $response = $this->makeRequest($id, true);
 
         return new MediaCollection($response);
     }

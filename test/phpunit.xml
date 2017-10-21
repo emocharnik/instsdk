@@ -6,4 +6,9 @@
         </testsuite>
     </testsuites>
 
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory>../src/Request/</directory>
+        </whitelist>
+    </filter>
 </phpunit>

@@ -24,7 +24,7 @@ class Auth extends Request
      * @return string
      * @throws InstagramException
      */
-    public function getLoginUrl($scope = [self::SCOPE_BASIC]): string
+    public function getLoginUrl($scope = [self::SCOPE_PUBLIC_CONTENT]): string
     {
         if (is_array($scope) && count(array_intersect($scope, $this->getScopes())) === count($scope)) {
             return vsprintf(self::LOGIN_URL_PATTERN, $this->getLoginParams($scope));

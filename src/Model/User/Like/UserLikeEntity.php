@@ -2,13 +2,13 @@
 
 namespace InstagramApp\Model\User\Like;
 
-use InstagramApp\Model\AbstractModel;
+use InstagramApp\Model\AbstractInstagramModel;
 
 /**
  * Class UserLikeEntity
  * @package InstagramApp\Model\User\Like
  */
-class UserLikeEntity extends AbstractModel
+class UserLikeEntity extends AbstractInstagramModel
 {
     /** @var int */
     protected $id;

@@ -8,7 +8,7 @@ use InstagramApp\Model\AbstractInstagramCollection;
  * Class UsersLikeCollection
  * @package InstagramApp\Model\User\Like
  */
-class UsersLikeCollection extends AbstractInstagramCollection
+class UsersLikeCollection extends AbstractInstagramCollection implements \Countable
 {
     /** @var UserLikeEntity [] */
     protected $users = [];
@@ -35,5 +35,13 @@ class UsersLikeCollection extends AbstractInstagramCollection
     public function getUsers(): array
     {
         return $this->users;
+    }
+
+    /**
+     * @return int
+     */
+    public function count()
+    {
+        return count($this->users);
     }
 }

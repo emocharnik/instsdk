@@ -3,13 +3,12 @@
 namespace InstagramApp\Model\User;
 
 use InstagramApp\Core\InstagramException;
-use InstagramApp\Model\User\Marked\UserMarkedEntity;
 
 /**
  * Class Current
  * @package InstagramApp\Model\User
  */
-class UserEntity extends UserMarkedEntity
+class UserExtendedEntity extends UserDefaultEntity
 {
     /** @var string */
     protected $bio;
