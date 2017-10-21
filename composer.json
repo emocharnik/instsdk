@@ -9,7 +9,7 @@
     "PHP",
     "SDK"
   ],
-  "minimum-stability": "dev",
+  "minimum-stability": "stable",
   "authors": [
     {
       "name": "Edgar Mocharnik",
