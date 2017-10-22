@@ -1,43 +1,32 @@
 {
-  "repositories": [
+  "name": "emocharnik/instsdk",
+  "type": "library",
+  "description": "This is test SDK for the Instagram API in PHP",
+  "license": "MIT",
+  "keywords": [
+    "Instagram",
+    "API",
+    "PHP",
+    "SDK"
+  ],
+  "authors": [
     {
-      "type": "package",
-      "package": {
-        "name": "emocharnik/instsdk",
-        "description": "This is test SDK for the Instagram API in PHP",
-        "version": "dev-master",
-        "source": {
-          "url": "git://github.com/emocharnik/instsdk.git",
-          "type": "git",
-          "reference": "master"
-        },
-        "authors": [
-          {
-            "name": "Edgar Mocharnik",
-            "email": "mocharnik@gmail.com"
-          }
-        ],
-        "autoload": {
-          "psr-4": {
-            "InstagramApp\\": "src",
-            "InstagramAppTest\\": "test"
-          }
-        },
-        "minimum-stability": "stable",
-        "require": {
-          "php": ">=7.1",
-          "ext-curl": "*",
-          "php-curl-class/php-curl-class": "^7.3",
-          "netresearch/jsonmapper": "^1.0"
-        },
-        "require-dev": {
-          "phpunit/phpunit": "^6.4",
-          "myclabs/deep-copy": "^1.7"
-        },
-        "scripts": {
-          "test": "phpunit --bootstrap test/Bootstrap.php --configuration test/phpunit.xml"
-        }
-      }
+      "name": "Edgar Mocharnik",
+      "email": "mocharnik@gmail.com"
     }
-  ]
+  ],
+  "autoload": {
+    "psr-4": {
+      "InstagramApp\\": "src",
+      "InstagramAppTest\\": "test"
+    }
+  },
+  "require": {
+    "php": ">=7.1",
+    "ext-curl": "*",
+    "php-curl-class/php-curl-class": "^7.3",
+    "netresearch/jsonmapper": "^1.0",
+    "myclabs/deep-copy": "^1.7",
+    "phpunit/phpunit": "^6.4"
+  }
 }
