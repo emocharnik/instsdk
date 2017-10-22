@@ -11,16 +11,7 @@ use InstagramApp\Model\BaseConfig;
  */
 abstract class Request
 {
-    const ACTION_APPROVE = 'approve';
-
-    const ACTION_BLOCK    = 'block';
-    const ACTION_FOLLOW   = 'follow';
-    const ACTION_DENY     = 'deny';
-    const ACTION_UNBLOCK  = 'unblock';
-    const ACTION_UNFOLLOW = 'unfollow';
-
     const SCOPE_PUBLIC_CONTENT = 'public_content';
-
     const RESPONSE_CODE_COMPLETED = 200;
 
     private const ID_SELF = 'self';
