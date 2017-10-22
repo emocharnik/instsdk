@@ -17,8 +17,15 @@
   ],
   "autoload": {
     "psr-4": {
-      "InstagramApp\\": "src",
-      "InstagramAppTest\\": "test"
+      "InstagramApp\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "InstagramAppTest\\": "test"
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "master-dev"
     }
   },
   "require": {
