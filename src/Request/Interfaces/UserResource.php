@@ -16,20 +16,20 @@ interface UserResource
      * Search for a user
      *
      * @param string  $name  Instagram username
-     * @param integer $limit Limit of returned results [optional]
+     * @param int $limit Limit of returned results [optional]
      *
      * @return UsersSearch
      */
-    public function searchUser($name, $limit = 10): UsersSearch;
+    public function searchUser(string $name, int $limit = 10): UsersSearch;
 
     /**
      * Get user info
      *
-     * @param integer [optional] $id Instagram user ID
+     * @param int [optional] $id Instagram user ID
      *
      * @return UserExtendedEntity
      */
-    public function getUser($id = 0): UserExtendedEntity;
+    public function getUser(int $id = 0): UserExtendedEntity;
 
     /**
      * Get user activity feed
@@ -39,5 +39,5 @@ interface UserResource
      *
      * @return MediaCollection
      */
-    public function getUserRecentMedia($id = 0, $limit = 0): MediaCollection;
+    public function getUserRecentMedia(int $id = 0, $limit = 0): MediaCollection;
 }

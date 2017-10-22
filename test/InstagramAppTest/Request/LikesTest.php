@@ -55,7 +55,7 @@ class LikesTest extends TestCase
     {
         $id = 1;
 
-        $response = ['code' => 200];
+        $response = ['meta' => ['code' => 200]];
 
         $config    = $this->createMock(BaseConfig::class);
         $requester = $this->createMock(Requester::class);
@@ -78,7 +78,7 @@ class LikesTest extends TestCase
     {
         $id = 1;
 
-        $response = ['code' => 200];
+        $response = ['meta' => ['code' => 200]];
 
         $config    = $this->createMock(BaseConfig::class);
         $requester = $this->createMock(Requester::class);

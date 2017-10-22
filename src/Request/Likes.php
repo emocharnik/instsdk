@@ -17,14 +17,14 @@ class Likes extends Media implements LikesResource
     /**
      * Get a list of users who have liked this media
      *
-     * @param int $id Instagram media ID
+     * @param string $id Instagram media ID
      *
      * @return UsersLikeCollection
      */
-    public function getMediaLikes(int $id): UsersLikeCollection
+    public function getMediaLikes(string $id): UsersLikeCollection
     {
         $str      = $id . '/' . self::ACTION_LIKES;
-        $response = $this->makeRequest($str, true);
+        $response = $this->makeRequest($str);
 
         return new UsersLikeCollection($response);
     }
@@ -32,30 +32,30 @@ class Likes extends Media implements LikesResource
     /**
      * Set user like on a media
      *
-     * @param int $id Instagram media ID
+     * @param string $id Instagram media ID
      *
      * @return bool
      */
-    public function likeMedia(int $id): bool
+    public function likeMedia(string $id): bool
     {
         $action   = $id . '/' . self::ACTION_LIKES;
-        $response = $this->makeRequest($action, true, [], Requester::REQUEST_TYPE_POST);
+        $response = $this->makeRequest($action, [], true, Requester::REQUEST_TYPE_POST);
 
-        return $response['code'] == self::RESPONSE_CODE_COMPLETED;
+        return $response['meta']['code'] == self::RESPONSE_CODE_COMPLETED;
     }
 
     /**
      * Remove user like on a media
      *
-     * @param int $id Instagram media ID
+     * @param string $id Instagram media ID
      *
      * @return bool
      */
-    public function deleteLikedMedia(int $id): bool
+    public function deleteLikedMedia(string $id): bool
     {
         $action   = $id . '/' . self::ACTION_LIKES;
-        $response = $this->makeRequest($action, true, [], Requester::REQUEST_TYPE_DELETE);
+        $response = $this->makeRequest($action, [], true, Requester::REQUEST_TYPE_DELETE);
 
-        return $response['code'] == self::RESPONSE_CODE_COMPLETED;
+        return $response['meta']['code'] == self::RESPONSE_CODE_COMPLETED;
     }
 }

@@ -12,7 +12,7 @@ use InstagramApp\Model\Media\UserMedia;
 class MediaCollection extends AbstractInstagramCollection implements \Countable
 {
     /** @var UserMedia[] */
-    protected $userMedia;
+    protected $userMedia = [];
 
     /**
      * @param UserMedia $user

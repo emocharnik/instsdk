@@ -67,7 +67,7 @@ class InstagramRequester implements Requester
             }
         }
 
-        $paramString = null;
+        $paramString = '';
 
         if (!empty($params) && is_array($params)) {
             $paramString = '&' . http_build_query($params);
@@ -98,13 +98,19 @@ class InstagramRequester implements Requester
 
         $jsonData = curl_exec($ch);
 
-        if (false === $jsonData) {
+        if (false == $jsonData) {
             throw new InstagramException("Error: makeRequest() - cURL error: " . curl_error($ch));
         }
 
         curl_close($ch);
 
-        return json_decode($jsonData);
+        $result = json_decode($jsonData, 1);
+
+        if (isset($result['meta']['code']) && $result['meta']['code'] != 200) {
+            throw new InstagramException($result['meta']['error_message']);
+        }
+
+        return $result;
     }
 
     /**
@@ -129,7 +135,7 @@ class InstagramRequester implements Requester
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $apiUrl);
         curl_setopt($ch, CURLOPT_POST, count($apiData));
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($code));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($apiData));
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Accept: application/json']);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -142,7 +148,7 @@ class InstagramRequester implements Requester
 
         curl_close($ch);
 
-        return json_decode($jsonData);
+        return json_decode($jsonData, 1);
     }
 
     /**

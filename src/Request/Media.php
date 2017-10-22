@@ -4,6 +4,7 @@ namespace InstagramApp\Request;
 
 use InstagramApp\Core\Request;
 use InstagramApp\Model\Media\Collection\MediaCollection;
+use InstagramApp\Model\Media\UserMedia;
 use InstagramApp\Request\Interfaces\MediaResource;
 
 /**
@@ -39,7 +40,7 @@ class Media extends Request implements MediaResource
             'max_timestamp' => $maxTime,
         ];
 
-        $response = $this->makeRequest(self::ACTION_SEARCH, false, $params);
+        $response = $this->makeRequest(self::ACTION_SEARCH, $params);
 
         return new MediaCollection($response);
     }
@@ -47,15 +48,15 @@ class Media extends Request implements MediaResource
     /**
      * Get media by its id
      *
-     * @param int $id Instagram media ID
+     * @param string $id Instagram media ID
      *
-     * @return MediaCollection
+     * @return UserMedia
      */
-    public function getMedia($id): MediaCollection
+    public function getMedia(string $id): UserMedia
     {
-        $response = $this->makeRequest($id, true);
+        $response = $this->makeRequest($id);
 
-        return new MediaCollection($response);
+        return new UserMedia($response);
     }
 
     /**

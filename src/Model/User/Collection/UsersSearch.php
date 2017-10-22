@@ -12,7 +12,7 @@ use InstagramApp\Model\User\UserSearchEntity;
 class UsersSearch extends AbstractInstagramCollection
 {
     /** @var UserSearchEntity[] */
-    protected $users;
+    protected $users = [];
 
     /**
      * @param UserSearchEntity $user

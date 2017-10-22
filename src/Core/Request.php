@@ -12,6 +12,8 @@ use InstagramApp\Model\BaseConfig;
 abstract class Request
 {
     const SCOPE_PUBLIC_CONTENT = 'public_content';
+    const SCOPE_LIKES          = 'likes';
+
     const RESPONSE_CODE_COMPLETED = 200;
 
     private const ID_SELF = 'self';
@@ -47,6 +49,7 @@ abstract class Request
      */
     private $scopes = [
         self::SCOPE_PUBLIC_CONTENT,
+        self::SCOPE_LIKES,
     ];
 
     /**
@@ -73,16 +76,17 @@ abstract class Request
 
     /**
      * @param mixed  $action
-     * @param bool   $auth
      * @param array  $params
+     * @param bool   $auth
+     *
      * @param string $method
      *
      * @return array
      */
     public function makeRequest(
         $action,
-        bool $auth = false,
         array $params = [],
+        bool $auth = true,
         string $method = Requester::REQUEST_TYPE_GET
     ): array {
         return $this->getRequester()->makeRequest($action, $method, $auth, $params);

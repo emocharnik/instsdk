@@ -15,7 +15,7 @@ use InstagramApp\Model\User\UserShortInfoEntity;
  */
 class UserMedia extends AbstractInstagramModel
 {
-    /** @var int */
+    /** @var string */
     protected $id;
 
     /** @var string */
@@ -57,20 +57,22 @@ class UserMedia extends AbstractInstagramModel
     /** @var UsersMarkedCollection */
     protected $users_in_photo;
 
+    /** @var bool */
+    protected $user_has_liked;
+
     /**
-     * @return int
+     * @return string
      */
-    public function getId(): int
+    public function getId(): string
     {
         return $this->id;
     }
 
     /**
-     * @param int $id
+     * @param string $id
      */
-    public function setId($id)
+    public function setId(string $id)
     {
-        $id       = intval($id);
         $this->id = $id;
     }
 
@@ -308,5 +310,21 @@ class UserMedia extends AbstractInstagramModel
         }
 
         $this->users_in_photo = $usersInPhoto;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isUserHasLiked(): bool
+    {
+        return $this->user_has_liked;
+    }
+
+    /**
+     * @param bool $user_has_liked
+     */
+    public function setUserHasLiked(bool $user_has_liked)
+    {
+        $this->user_has_liked = $user_has_liked;
     }
 }

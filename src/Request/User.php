@@ -14,10 +14,10 @@ use InstagramApp\Request\Interfaces\UserResource;
  */
 class User extends Request implements UserResource
 {
-    private const ACTION_SEARCH = 'search';
-    private const ACTION_FEED   = 'feed';
+    private const ACTION_SEARCH       = 'search';
+    private const ACTION_MEDIA_RECENT = 'media/recent';
 
-    protected const CONTROLLER_NAME = 'users';
+    protected $controllerName = 'users';
 
     /**
      * Search for a user
@@ -27,11 +27,11 @@ class User extends Request implements UserResource
      *
      * @return UsersSearch
      */
-    public function searchUser($name, $limit = 10): UsersSearch
+    public function searchUser(string $name, int $limit = 10): UsersSearch
     {
         $params = ['q' => $name, 'count' => $limit];
 
-        return new UsersSearch($this->makeRequest(self::ACTION_SEARCH, false, $params));
+        return new UsersSearch($this->makeRequest(self::ACTION_SEARCH, $params, false));
     }
 
     /**
@@ -41,11 +41,11 @@ class User extends Request implements UserResource
      *
      * @return UserExtendedEntity
      */
-    public function getUser($id = 0): UserExtendedEntity
+    public function getUser(int $id = 0): UserExtendedEntity
     {
         $id = $this->resolveUserId($id);
 
-        return new UserExtendedEntity($this->makeRequest($id, $this->isAuthRequired()));
+        return new UserExtendedEntity($this->makeRequest($id, [], $this->isAuthRequired()));
     }
 
     /**
@@ -56,10 +56,11 @@ class User extends Request implements UserResource
      *
      * @return MediaCollection
      */
-    public function getUserRecentMedia($id = 0, $limit = 0): MediaCollection
+    public function getUserRecentMedia(int $id = 0, $limit = 0): MediaCollection
     {
         $id       = $this->resolveUserId($id);
-        $response = $this->makeRequest($id . '/' . self::ACTION_FEED, $this->isAuthRequired(), ['count' => $limit]);
+        $action   = $id . '/' . self::ACTION_MEDIA_RECENT;
+        $response = $this->makeRequest($action, ['count' => $limit], $this->isAuthRequired());
 
         return new MediaCollection($response);
     }

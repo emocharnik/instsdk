@@ -10,7 +10,7 @@ use InstagramApp\Model\AbstractInstagramModel;
  */
 class UserLikeEntity extends AbstractInstagramModel
 {
-    /** @var int */
+    /** @var string */
     protected $id;
 
     /** @var string */
@@ -26,19 +26,18 @@ class UserLikeEntity extends AbstractInstagramModel
     protected $type;
 
     /**
-     * @return int
+     * @return string
      */
-    public function getId(): int
+    public function getId(): string
     {
         return $this->id;
     }
 
     /**
-     * @param int | string $id
+     * @param string $id
      */
-    public function setId($id)
+    public function setId(string $id)
     {
-        $id       = intval($id);
         $this->id = $id;
     }
 

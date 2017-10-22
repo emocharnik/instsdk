@@ -10,7 +10,7 @@ use InstagramApp\Model\AbstractInstagramModel;
  */
 class UserShortInfoEntity extends AbstractInstagramModel
 {
-    /** @var int */
+    /** @var string */
     protected $id;
 
     /** @var string */
@@ -20,17 +20,17 @@ class UserShortInfoEntity extends AbstractInstagramModel
     protected $profile_picture;
 
     /**
-     * @return int
+     * @return string
      */
-    public function getId(): int
+    public function getId(): string
     {
         return $this->id;
     }
 
     /**
-     * @param int $id
+     * @param string $id
      */
-    public function setId(int $id)
+    public function setId(string $id)
     {
         $this->id = $id;
     }

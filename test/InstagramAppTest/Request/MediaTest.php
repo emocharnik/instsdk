@@ -18,7 +18,7 @@ class MediaTest extends TestCase
 {
     public function testGetMedia()
     {
-        $id   = 1;
+        $id   = '1';
         $link = 'https://instagram.com/medialink';
         $date = new DateTime();
 
@@ -28,7 +28,7 @@ class MediaTest extends TestCase
             'created_time' => $date,
         ];
 
-        $response = ['data' => [$userMedia]];
+        $response = ['data' => $userMedia];
 
         $config    = $this->createMock(BaseConfig::class);
         $requester = $this->createMock(Requester::class);
@@ -41,11 +41,7 @@ class MediaTest extends TestCase
         $resource = new Media($config, $requester);
         $media    = $resource->getMedia($id);
 
-        $this->assertInstanceOf(MediaCollection::class, $media);
-        $this->assertCount(count($response['data']), $media);
-
-        foreach ($media as $mediaItem) {
-            $this->assertInstanceOf(UserMedia::class, $mediaItem);
-        }
+        $this->assertInstanceOf(UserMedia::class, $media);
+        $this->assertEquals($id, $media->getId());
     }
 }

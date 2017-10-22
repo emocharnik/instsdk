@@ -3,6 +3,7 @@
 namespace InstagramApp\Request\Interfaces;
 
 use InstagramApp\Model\Media\Collection\MediaCollection;
+use InstagramApp\Model\Media\UserMedia;
 
 /**
  * Interface MediaResource
@@ -26,11 +27,11 @@ interface MediaResource
     /**
      * Get media by its id
      *
-     * @param int $id Instagram media ID
+     * @param string $id Instagram media ID
      *
-     * @return MediaCollection
+     * @return UserMedia
      */
-    public function getMedia($id): MediaCollection;
+    public function getMedia(string $id): UserMedia;
 
     /**
      * Get the most popular media

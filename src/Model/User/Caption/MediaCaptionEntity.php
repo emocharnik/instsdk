@@ -11,7 +11,7 @@ use InstagramApp\Model\AbstractModel;
  */
 class MediaCaptionEntity extends AbstractModel
 {
-    /** @var int */
+    /** @var string */
     protected $id;
 
     /** @var DateTime */
@@ -24,17 +24,17 @@ class MediaCaptionEntity extends AbstractModel
     protected $from;
 
     /**
-     * @return int
+     * @return string
      */
-    public function getId(): int
+    public function getId(): string
     {
         return $this->id;
     }
 
     /**
-     * @param int $id
+     * @param string $id
      */
-    public function setId(int $id)
+    public function setId(string $id)
     {
         $this->id = $id;
     }

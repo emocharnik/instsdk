@@ -18,7 +18,9 @@ abstract class AbstractInstagramCollection extends AbstractModel
      */
     public function exchangeArray(array $array)
     {
-        foreach ($array['data'] as $item) {
+        $data = isset($array['data']) ? $array['data'] : $array;
+
+        foreach ($data as $item) {
             $this->append($item);
         }
     }

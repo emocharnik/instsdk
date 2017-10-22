@@ -13,27 +13,27 @@ interface LikesResource
     /**
      * Get a list of users who have liked this media
      *
-     * @param int $id Instagram media ID
+     * @param string $id Instagram media ID
      *
      * @return UsersLikeCollection
      */
-    public function getMediaLikes(int $id): UsersLikeCollection;
+    public function getMediaLikes(string $id): UsersLikeCollection;
 
     /**
      * Set user like on a media
      *
-     * @param int $id Instagram media ID
+     * @param string $id Instagram media ID
      *
      * @return bool
      */
-    public function likeMedia(int $id): bool;
+    public function likeMedia(string $id): bool;
 
     /**
      * Remove user like on a media
      *
-     * @param int $id Instagram media ID
+     * @param string $id Instagram media ID
      *
      * @return bool
      */
-    public function deleteLikedMedia(int $id): bool;
+    public function deleteLikedMedia(string $id): bool;
 }

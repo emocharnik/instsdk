@@ -35,10 +35,12 @@ abstract class AbstractModel implements ArraySerializableInterface
         foreach ($array as $key => $value) {
             $methodName = static::sanitizeKey($key);
 
-            if (method_exists($this, $methodName)) {
-                $this->{$methodName}($value);
-            } else {
-                $this->$key = $value;
+            if (!is_null($value)) {
+                if (method_exists($this, $methodName)) {
+                    $this->{$methodName}($value);
+                } else {
+                    $this->$key = $value;
+                }
             }
         }
     }

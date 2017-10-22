@@ -10,7 +10,7 @@ use InstagramApp\Model\AbstractModel;
  */
 class LocationEntity extends AbstractModel
 {
-    /** @var int */
+    /** @var string */
     protected $id;
 
     /** @var float */
@@ -26,19 +26,18 @@ class LocationEntity extends AbstractModel
     protected $street_address;
 
     /**
-     * @return int
+     * @return string
      */
-    public function getId(): int
+    public function getId(): string
     {
         return $this->id;
     }
 
     /**
-     * @param int $id
+     * @param string $id
      */
-    public function setId($id)
+    public function setId(string $id)
     {
-        $id       = intval($id);
         $this->id = $id;
     }
 

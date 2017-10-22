@@ -2,7 +2,7 @@
 $config = [
     'apiKey'      => 'key',
     'apiSecret'   => 'secret',
-    'callbackUrl' => 'https://youexample.com/callback',
+    'apiCallback' => 'https://yourexample.com/callback',
 ];
 
 $authorization = \InstagramApp\Factory\InstagramAppFactory::getAuthResource($config);

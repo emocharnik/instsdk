@@ -4,6 +4,7 @@ namespace InstagramAppTest\Request;
 
 use InstagramApp\Core\Interfaces\Requester;
 use InstagramApp\Model\BaseConfig;
+use InstagramApp\Model\Media\Collection\MediaCollection;
 use InstagramApp\Model\User\UserExtendedEntity;
 use InstagramApp\Request\User;
 use PHPUnit\Framework\TestCase;
@@ -73,7 +74,7 @@ class UserTest extends TestCase
         $resource = new User($config, $requester);
         $resource->setAccessToken($token);
 
-        $user     = $resource->getUser();
+        $user = $resource->getUser();
 
         $this->assertInstanceOf(UserExtendedEntity::class, $user);
     }

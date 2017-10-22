@@ -10,7 +10,7 @@ use InstagramApp\Model\AbstractInstagramModel;
  */
 class UserFromEntity extends AbstractInstagramModel
 {
-    /** @var int */
+    /** @var string */
     protected $id;
 
     /** @var string */
@@ -21,10 +21,11 @@ class UserFromEntity extends AbstractInstagramModel
 
     /** @var string */
     protected $type;
+
     /**
-     * @return int
+     * @return string
      */
-    public function getId(): int
+    public function getId(): string
     {
         return $this->id;
     }
@@ -34,7 +35,6 @@ class UserFromEntity extends AbstractInstagramModel
      */
     public function setId(string $id)
     {
-        $id       = intval($id);
         $this->id = $id;
     }
 

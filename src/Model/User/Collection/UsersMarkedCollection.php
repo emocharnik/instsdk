@@ -3,6 +3,7 @@
 namespace InstagramApp\Model\User\Collection;
 
 use InstagramApp\Model\AbstractInstagramCollection;
+use InstagramApp\Model\User\Marked\MarkEntity;
 use InstagramApp\Model\User\UserDefaultEntity;
 
 /**
@@ -11,13 +12,13 @@ use InstagramApp\Model\User\UserDefaultEntity;
  */
 class UsersMarkedCollection extends AbstractInstagramCollection
 {
-    /** @var UserDefaultEntity[] */
-    protected $users;
+    /** @var MarkEntity[] */
+    protected $users = [];
 
     /**
-     * @param UserDefaultEntity $user
+     * @param MarkEntity $user
      */
-    public function add(UserDefaultEntity $user)
+    public function add(MarkEntity $user)
     {
         $this->users[] = $user;
     }
@@ -27,12 +28,12 @@ class UsersMarkedCollection extends AbstractInstagramCollection
      */
     public function append(array $data)
     {
-        $user = new UserDefaultEntity($data);
+        $user = new MarkEntity($data);
         $this->add($user);
     }
 
     /**
-     * @return UserDefaultEntity[]
+     * @return MarkEntity[]
      */
     public function getUsers(): array
     {
