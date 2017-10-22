@@ -58,7 +58,7 @@ class AuthTest extends TestCase
         /** @var Requester | \PHPUnit_Framework_MockObject_MockObject $requester */
         /** @var BaseConfig $config */
 
-        $apiData = [];
+        $code = 'authorization_code';
 
         $token    = 'token';
         $userId   = 1;
@@ -73,10 +73,10 @@ class AuthTest extends TestCase
 
         $config    = $this->createMock(BaseConfig::class);
         $requester = $this->createMock(Requester::class);
-        $requester->expects($this->once())->method('login')->with($loginUrl, $apiData)->willReturn($response);
+        $requester->expects($this->once())->method('login')->with($loginUrl, $code)->willReturn($response);
 
         $resource = new Auth($config, $requester);
-        $userData = $resource->login($apiData);
+        $userData = $resource->login($code);
 
         $this->assertInstanceOf(LoginDataEntity::class, $userData);
         $this->assertEquals($token, $userData->getAccessToken());

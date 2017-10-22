@@ -14,6 +14,8 @@ interface Requester
     const REQUEST_TYPE_GET    = 'GET';
     const REQUEST_TYPE_POST   = 'POST';
 
+    const DEFAULT_GRANT_TYPE = 'authorization_code';
+
     /**
      * @param string $action
      * @param string $method
@@ -27,11 +29,13 @@ interface Requester
 
     /**
      * @param string $apiUrl
-     * @param array  $apiData
+     * @param string $code
      *
      * @return array
+     * @internal param array $apiData
+     *
      */
-    public function login(string $apiUrl, array $apiData): array;
+    public function login(string $apiUrl, string $code): array;
 
     /**
      * @param Request $request

@@ -6,12 +6,13 @@ use InstagramApp\Core\Request;
 use InstagramApp\Model\Media\Collection\MediaCollection;
 use InstagramApp\Model\User\Collection\UsersSearch;
 use InstagramApp\Model\User\UserExtendedEntity;
+use InstagramApp\Request\Interfaces\UserResource;
 
 /**
  * Class User
  * @package InstagramApp\Request
  */
-class User extends Request
+class User extends Request implements UserResource
 {
     private const ACTION_SEARCH = 'search';
     private const ACTION_FEED   = 'feed';
@@ -26,7 +27,7 @@ class User extends Request
      *
      * @return UsersSearch
      */
-    final public function searchUser($name, $limit = 10): UsersSearch
+    public function searchUser($name, $limit = 10): UsersSearch
     {
         $params = ['q' => $name, 'count' => $limit];
 

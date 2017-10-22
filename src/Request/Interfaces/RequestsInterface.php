@@ -2,11 +2,6 @@
 
 namespace InstagramApp\Request\Interfaces;
 
-use InstagramApp\Request\Auth;
-use InstagramApp\Request\Likes;
-use InstagramApp\Request\Media;
-use InstagramApp\Request\User;
-
 /**
  * Interface RequestsInterface
  * @package InstagramApp\Request\Interfaces
@@ -14,22 +9,22 @@ use InstagramApp\Request\User;
 interface RequestsInterface
 {
     /**
-     * @return Auth
+     * @return AuthResource
      */
-    public function getAuth(): Auth;
+    public function getAuth(): AuthResource;
 
     /**
-     * @return Likes
+     * @return LikesResource
      */
-    public function getLikes(): Likes;
+    public function getLikes(): LikesResource;
 
     /**
-     * @return Media
+     * @return MediaResource
      */
-    public function getMedia(): Media;
+    public function getMedia(): MediaResource;
 
     /**
-     * @return User
+     * @return UserResource
      */
-    public function getUser(): User;
+    public function getUser(): UserResource;
 }

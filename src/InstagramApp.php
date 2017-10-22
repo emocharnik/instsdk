@@ -5,7 +5,11 @@ namespace InstagramApp;
 use InstagramApp\Core\Interfaces\Requester;
 use InstagramApp\Model\BaseConfig;
 use InstagramApp\Request\Auth;
+use InstagramApp\Request\Interfaces\AuthResource;
+use InstagramApp\Request\Interfaces\LikesResource;
+use InstagramApp\Request\Interfaces\MediaResource;
 use InstagramApp\Request\Interfaces\RequestsInterface;
+use InstagramApp\Request\Interfaces\UserResource;
 use InstagramApp\Request\Likes;
 use InstagramApp\Request\Media;
 use InstagramApp\Request\User;
@@ -40,9 +44,9 @@ class InstagramApp implements RequestsInterface
     }
 
     /**
-     * @return Auth
+     * @return AuthResource
      */
-    public function getAuth(): Auth
+    public function getAuth(): AuthResource
     {
         $resource = new Auth($this->getConfig(), $this->getRequester());
         $resource->setAccessToken($this->getToken());
@@ -51,9 +55,9 @@ class InstagramApp implements RequestsInterface
     }
 
     /**
-     * @return Likes
+     * @return LikesResource
      */
-    public function getLikes(): Likes
+    public function getLikes(): LikesResource
     {
         $likes = new Likes($this->getConfig(), $this->getRequester());
         $likes->setAccessToken($this->getToken());
@@ -62,9 +66,9 @@ class InstagramApp implements RequestsInterface
     }
 
     /**
-     * @return Media
+     * @return MediaResource
      */
-    public function getMedia(): Media
+    public function getMedia(): MediaResource
     {
         $media = new Media($this->getConfig(), $this->getRequester());
         $media->setAccessToken($this->getToken());
@@ -73,9 +77,9 @@ class InstagramApp implements RequestsInterface
     }
 
     /**
-     * @return User
+     * @return UserResource
      */
-    public function getUser(): User
+    public function getUser(): UserResource
     {
         $user = new User($this->getConfig(), $this->getRequester());
         $user->setAccessToken($this->getToken());

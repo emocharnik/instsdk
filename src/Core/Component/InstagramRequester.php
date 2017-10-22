@@ -62,7 +62,7 @@ class InstagramRequester implements Requester
             if ($this->getRequest()->getAccessToken()) {
                 $authMethod = '?access_token=' . $this->getRequest()->getAccessToken();
             } else {
-                $str = "Error: createAPICall() | $request - This method requires an authenticated users access token.";
+                $str = "Error: makeRequest() | $request - This method requires an authenticated users access token.";
                 throw new InstagramException($str);
             }
         }
@@ -92,14 +92,14 @@ class InstagramRequester implements Requester
         if (self::REQUEST_TYPE_POST === $method) {
             curl_setopt($ch, CURLOPT_POST, count($params));
             curl_setopt($ch, CURLOPT_POSTFIELDS, ltrim($paramString, '&'));
-        } elseif (self::REQUEST_TYPE_DELETE === $method) {
+        } else if (self::REQUEST_TYPE_DELETE === $method) {
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, self::REQUEST_TYPE_DELETE);
         }
 
         $jsonData = curl_exec($ch);
 
         if (false === $jsonData) {
-            throw new InstagramException("Error: _makeCall() - cURL error: " . curl_error($ch));
+            throw new InstagramException("Error: makeRequest() - cURL error: " . curl_error($ch));
         }
 
         curl_close($ch);
@@ -111,17 +111,25 @@ class InstagramRequester implements Requester
      * The OAuth call operator
      *
      * @param string $apiUrl
-     * @param array  $apiData The post API data
+     * @param string $code The post API data
      *
      * @return array
      * @throws InstagramException
      */
-    public function login(string $apiUrl, array $apiData): array
+    public function login(string $apiUrl, string $code): array
     {
+        $apiData = [
+            'client_id'     => $this->getRequest()->getApiKey(),
+            'client_secret' => $this->getRequest()->getApiSecret(),
+            'redirect_uri'  => $this->getRequest()->getCallbackUrl(),
+            'grant_type'    => Requester::DEFAULT_GRANT_TYPE,
+            'code'          => $code,
+        ];
+
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $apiUrl);
         curl_setopt($ch, CURLOPT_POST, count($apiData));
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($apiData));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($code));
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Accept: application/json']);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -129,7 +137,7 @@ class InstagramRequester implements Requester
         $jsonData = curl_exec($ch);
 
         if (false === $jsonData) {
-            throw new InstagramException("Error: makeOAuthCall() - cURL error: " . curl_error($ch));
+            throw new InstagramException("Error: login() - cURL error: " . curl_error($ch));
         }
 
         curl_close($ch);

@@ -4,12 +4,13 @@ namespace InstagramApp\Request;
 
 use InstagramApp\Core\Request;
 use InstagramApp\Model\Media\Collection\MediaCollection;
+use InstagramApp\Request\Interfaces\MediaResource;
 
 /**
  * Class Media
  * @package InstagramApp\Request
  */
-class Media extends Request
+class Media extends Request implements MediaResource
 {
     private const ACTION_SEARCH    = 'search';
     private const ACTION_SHORTCODE = 'shortcode';

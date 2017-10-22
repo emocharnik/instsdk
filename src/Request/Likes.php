@@ -4,12 +4,13 @@ namespace InstagramApp\Request;
 
 use InstagramApp\Core\Interfaces\Requester;
 use InstagramApp\Model\User\Like\UsersLikeCollection;
+use InstagramApp\Request\Interfaces\LikesResource;
 
 /**
  * Class Likes
  * @package InstagramApp\Request
  */
-class Likes extends Media
+class Likes extends Media implements LikesResource
 {
     private const ACTION_LIKES = 'likes';
 
@@ -35,7 +36,7 @@ class Likes extends Media
      *
      * @return bool
      */
-    public function likeMedia(int $id)
+    public function likeMedia(int $id): bool
     {
         $action   = $id . '/' . self::ACTION_LIKES;
         $response = $this->makeRequest($action, true, [], Requester::REQUEST_TYPE_POST);
@@ -50,7 +51,7 @@ class Likes extends Media
      *
      * @return bool
      */
-    public function deleteLikedMedia(int $id)
+    public function deleteLikedMedia(int $id): bool
     {
         $action   = $id . '/' . self::ACTION_LIKES;
         $response = $this->makeRequest($action, true, [], Requester::REQUEST_TYPE_DELETE);

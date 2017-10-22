@@ -5,12 +5,13 @@ namespace InstagramApp\Request;
 use InstagramApp\Core\InstagramException;
 use InstagramApp\Core\Request;
 use InstagramApp\Model\User\Login\LoginDataEntity;
+use InstagramApp\Request\Interfaces\AuthResource;
 
 /**
  * Class Auth
  * @package InstagramApp\Request
  */
-class Auth extends Request
+class Auth extends Request implements AuthResource
 {
     private const API_OAUTH_URL       = 'https://api.instagram.com/oauth/authorize';
     private const API_OAUTH_TOKEN_URL = 'https://api.instagram.com/oauth/access_token';
@@ -35,13 +36,13 @@ class Auth extends Request
     }
 
     /**
-     * @param array $apiData
+     * @param string $code
      *
      * @return LoginDataEntity
      */
-    public function login(array $apiData): LoginDataEntity
+    public function login(string $code): LoginDataEntity
     {
-        $loginData = $this->getRequester()->login(self::API_OAUTH_TOKEN_URL, $apiData);
+        $loginData = $this->getRequester()->login(self::API_OAUTH_TOKEN_URL, $code);
 
         return new LoginDataEntity($loginData);
     }
