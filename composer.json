@@ -3,11 +3,11 @@
     {
       "type": "package",
       "package": {
-        "name": "edgarmocharnick/instagram-sdk",
+        "name": "emocharnik/instsdk",
         "description": "This is test SDK for the Instagram API in PHP",
         "version": "dev-master",
         "source": {
-          "url": "git://github.com/edgarmocharnick/instagram-sdk.git",
+          "url": "git://github.com/emocharnik/instsdk.git",
           "type": "git",
           "reference": "master"
         },
