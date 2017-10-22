@@ -23,11 +23,6 @@
   "autoload-dev": {
     "InstagramAppTest\\": "test"
   },
-  "extra": {
-    "branch-alias": {
-      "dev-master": "master-dev"
-    }
-  },
   "require": {
     "php": ">=7.1",
     "ext-curl": "*",
