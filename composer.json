@@ -3,6 +3,7 @@
   "type": "library",
   "description": "This is test SDK for the Instagram API in PHP",
   "license": "MIT",
+  "minimum-stability": "dev",
   "keywords": [
     "Instagram",
     "PHP",
