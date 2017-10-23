@@ -36,7 +36,9 @@ interface Requester
     public function createAccessCode(string $code): LoginDataEntity;
 
     /**
+     * @param array $scope
+     *
      * @return mixed
      */
-    public function getLoginUrl();
+    public function getLoginUrl($scope = [self::SCOPE_PUBLIC_CONTENT]);
 }
