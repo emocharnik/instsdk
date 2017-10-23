@@ -9,11 +9,6 @@ namespace InstagramApp\Request\Interfaces;
 interface RequestsInterface
 {
     /**
-     * @return AuthResource
-     */
-    public function getAuth(): AuthResource;
-
-    /**
      * @return LikesResource
      */
     public function getLikes(): LikesResource;

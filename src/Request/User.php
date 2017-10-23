@@ -31,7 +31,7 @@ class User extends Request implements UserResource
     {
         $params = ['q' => $name, 'count' => $limit];
 
-        return new UsersSearch($this->makeRequest(self::ACTION_SEARCH, $params, false));
+        return new UsersSearch($this->makeRequest(self::ACTION_SEARCH, $params));
     }
 
     /**
@@ -45,7 +45,7 @@ class User extends Request implements UserResource
     {
         $id = $this->resolveUserId($id);
 
-        return new UserExtendedEntity($this->makeRequest($id, [], $this->isAuthRequired()));
+        return new UserExtendedEntity($this->makeRequest($id, []));
     }
 
     /**
@@ -60,7 +60,7 @@ class User extends Request implements UserResource
     {
         $id       = $this->resolveUserId($id);
         $action   = $id . '/' . self::ACTION_MEDIA_RECENT;
-        $response = $this->makeRequest($action, ['count' => $limit], $this->isAuthRequired());
+        $response = $this->makeRequest($action, ['count' => $limit]);
 
         return new MediaCollection($response);
     }

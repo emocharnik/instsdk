@@ -4,8 +4,6 @@ namespace InstagramAppTest\Request;
 
 use DateTime;
 use InstagramApp\Core\Interfaces\Requester;
-use InstagramApp\Model\BaseConfig;
-use InstagramApp\Model\Media\Collection\MediaCollection;
 use InstagramApp\Model\Media\UserMedia;
 use InstagramApp\Request\Media;
 use PHPUnit\Framework\TestCase;
@@ -18,9 +16,10 @@ class MediaTest extends TestCase
 {
     public function testGetMedia()
     {
-        $id   = '1';
-        $link = 'https://instagram.com/medialink';
-        $date = new DateTime();
+        $id     = '1';
+        $action = 'media/' . $id;
+        $link   = 'https://instagram.com/medialink';
+        $date   = new DateTime();
 
         $userMedia = [
             'id'           => $id,
@@ -30,15 +29,15 @@ class MediaTest extends TestCase
 
         $response = ['data' => $userMedia];
 
-        $config    = $this->createMock(BaseConfig::class);
+        /** @var Requester | \PHPUnit_Framework_MockObject_MockObject $requester */
         $requester = $this->createMock(Requester::class);
 
         $requester->expects($this->once())
             ->method('makeRequest')
-            ->with($id, 'GET', true, [])
+            ->with($action, 'GET', [])
             ->willReturn($response);
 
-        $resource = new Media($config, $requester);
+        $resource = new Media($requester);
         $media    = $resource->getMedia($id);
 
         $this->assertInstanceOf(UserMedia::class, $media);

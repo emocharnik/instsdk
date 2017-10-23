@@ -3,8 +3,8 @@
 namespace InstagramApp\Factory;
 
 use InstagramApp\Core\Component\InstagramRequester;
+use InstagramApp\Core\Interfaces\Requester;
 use InstagramApp\InstagramApp;
-use InstagramApp\Request\Interfaces\AuthResource;
 use InstagramApp\Request\Interfaces\RequestsInterface;
 
 /**
@@ -21,21 +21,21 @@ class InstagramAppFactory
      */
     public static function createResources(array $config, string $token): RequestsInterface
     {
-        $requester = new InstagramRequester();
+        $requester = new InstagramRequester($config);
+        $requester->setAccessToken($token);
 
-        return new InstagramApp($config, $requester, $token);
+        return new InstagramApp($requester);
     }
 
     /**
      * @param array $config
      *
-     * @return AuthResource
+     * @return Requester
      */
-    public static function getAuthResource(array $config): AuthResource
+    public static function getAuthResource(array $config): Requester
     {
-        $requester = new InstagramRequester();
-        $app       = new InstagramApp($config, $requester);
+        $requester = new InstagramRequester($config);
 
-        return $app->getAuth();
+        return $requester;
     }
 }

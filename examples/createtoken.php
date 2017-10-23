@@ -13,4 +13,4 @@ $loginUrl = $authorization->getLoginUrl();
 
 $code = 'receivedAuthorizationCodeFromInstagram';
 
-$loginData = $authorization->login($code);
+$loginData = $authorization->createAccessCode($code);
