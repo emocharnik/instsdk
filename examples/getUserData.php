@@ -15,4 +15,3 @@ $you       = $userResource->getUser();
 $otherUser = $userResource->getUser(1);
 $userMedia = $userResource->getUserRecentMedia(1, 5);
 $users     = $userResource->searchUser('username', 10);
-

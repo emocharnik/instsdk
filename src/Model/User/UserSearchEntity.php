@@ -14,16 +14,22 @@ class UserSearchEntity extends AbstractInstagramModel
     protected $id;
 
     /** @var string */
-    protected $first_name;
-
-    /** @var string */
-    protected $last_name;
+    protected $full_name;
 
     /** @var string */
     protected $profile_picture;
 
     /** @var string */
     protected $username;
+
+    /** @var string */
+    protected $bio;
+
+    /** @var string */
+    protected $website;
+
+    /** @var bool */
+    protected $is_business;
 
     /**
      * @return string
@@ -44,33 +50,17 @@ class UserSearchEntity extends AbstractInstagramModel
     /**
      * @return string
      */
-    public function getFirstName(): string
+    public function getFullName(): string
     {
-        return $this->first_name;
+        return $this->full_name;
     }
 
     /**
-     * @param string $first_name
+     * @param string $full_name
      */
-    public function setFirstName(string $first_name)
+    public function setFullName(string $full_name)
     {
-        $this->first_name = $first_name;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLastName(): string
-    {
-        return $this->last_name;
-    }
-
-    /**
-     * @param string $last_name
-     */
-    public function setLastName(string $last_name)
-    {
-        $this->last_name = $last_name;
+        $this->full_name = $full_name;
     }
 
     /**
@@ -87,5 +77,53 @@ class UserSearchEntity extends AbstractInstagramModel
     public function setUsername(string $username)
     {
         $this->username = $username;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBio(): string
+    {
+        return $this->bio;
+    }
+
+    /**
+     * @param string $bio
+     */
+    public function setBio(string $bio)
+    {
+        $this->bio = $bio;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWebsite(): string
+    {
+        return $this->website;
+    }
+
+    /**
+     * @param string $website
+     */
+    public function setWebsite(string $website)
+    {
+        $this->website = $website;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isBusiness(): bool
+    {
+        return $this->is_business;
+    }
+
+    /**
+     * @param bool $is_business
+     */
+    public function setIsBusiness(bool $is_business)
+    {
+        $this->is_business = $is_business;
     }
 }

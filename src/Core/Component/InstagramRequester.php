@@ -4,7 +4,8 @@ namespace InstagramApp\Core\Component;
 
 use InstagramApp\Core\InstagramException;
 use InstagramApp\Core\Interfaces\Requester;
-use InstagramApp\Core\Request;
+use InstagramApp\Model\BaseConfig;
+use InstagramApp\Model\User\Login\LoginDataEntity;
 
 /**
  * Class InstagramRequester
@@ -14,28 +15,38 @@ class InstagramRequester implements Requester
 {
     const API_URL = 'https://api.instagram.com/v1/';
 
-    /** @var Request */
-    protected $request;
+    private const API_OAUTH_TOKEN_URL   = 'https://api.instagram.com/oauth/access_token';
+    private const API_OAUTH_URL         = 'https://api.instagram.com/oauth/authorize';
+    private const LOGIN_URL_PATTERN     = '%s?client_id=%s&redirect_uri=%s&scope=%s&response_type=%s';
+    private const DEFAULT_RESPONSE_TYPE = 'code';
+
+    /** @var BaseConfig */
+    protected $config;
+
+    /** @var string */
+    protected $accessToken;
 
     /**
-     * @return Request
-     * @throws InstagramException
+     * Available scopes
+     *
+     * @var array
      */
-    public function getRequest(): Request
-    {
-        if (!$this->request) {
-            throw new InstagramException(Request::class . ' should be assigned');
-        }
-
-        return $this->request;
-    }
+    private $scopes = [
+        self::SCOPE_PUBLIC_CONTENT,
+        self::SCOPE_LIKES,
+    ];
 
     /**
-     * @param Request $request
+     * InstagramRequester constructor.
+     *
+     * @param array  $config
+     * @param string $accessToken
      */
-    public function setRequest(Request $request)
+    public function __construct(array $config, string $accessToken = '')
     {
-        $this->request = $request;
+        $config = new BaseConfig($config);
+        $this->setConfig($config);
+        $this->setAccessToken($accessToken);
     }
 
     /**
@@ -44,25 +55,22 @@ class InstagramRequester implements Requester
      * @param string $action API resource path
      * @param string $method
      *
-     * @param bool   $auth
      * @param array  $params Additional request parameters  [optional]
      *
      * @return array
      * @throws InstagramException
      */
-    public function makeRequest(string $action, string $method, bool $auth = false, array $params = []): array
+    public function makeRequest(string $action, string $method, array $params = []): array
     {
-        $request = $this->getRequest()->getController() . '/' . $action;
-
-        if (false === $auth) {
+        if ($this->getConfig()->isOnlyPublicAccess()) {
             // if the call doesn't requires authentication
-            $authMethod = '?client_id=' . $this->getRequest()->getApiKey();
+            $authMethod = '?client_id=' . $this->getConfig()->getApiKey();
         } else {
             // if the call needs an authenticated user
-            if ($this->getRequest()->getAccessToken()) {
-                $authMethod = '?access_token=' . $this->getRequest()->getAccessToken();
+            if ($this->getAccessToken()) {
+                $authMethod = '?access_token=' . $this->getAccessToken();
             } else {
-                $str = "Error: makeRequest() | $request - This method requires an authenticated users access token.";
+                $str = "Error: makeRequest() | $action - This method requires an authenticated users access token.";
                 throw new InstagramException($str);
             }
         }
@@ -73,12 +81,12 @@ class InstagramRequester implements Requester
             $paramString = '&' . http_build_query($params);
         }
 
-        $apiCall = $this->composeUrl($request, $method, $authMethod, $paramString);
+        $apiCall = $this->composeUrl($action, $method, $authMethod, $paramString);
 
         // signed header of POST/DELETE requests
         $headerData = ['Accept: application/json'];
 
-        if (true === $this->getRequest()->isSignedHeader() && self::REQUEST_TYPE_POST !== $method) {
+        if (self::REQUEST_TYPE_DELETE == $method) {
             $headerData[] = 'X-Insta-Forwarded-For: ' . $this->signHeader();
         }
 
@@ -92,7 +100,7 @@ class InstagramRequester implements Requester
         if (self::REQUEST_TYPE_POST === $method) {
             curl_setopt($ch, CURLOPT_POST, count($params));
             curl_setopt($ch, CURLOPT_POSTFIELDS, ltrim($paramString, '&'));
-        } else if (self::REQUEST_TYPE_DELETE === $method) {
+        } elseif (self::REQUEST_TYPE_DELETE === $method) {
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, self::REQUEST_TYPE_DELETE);
         }
 
@@ -114,6 +122,52 @@ class InstagramRequester implements Requester
     }
 
     /**
+     * @param array $scope [optional] $scope       Requesting additional permissions
+     *
+     * @return string
+     * @throws InstagramException
+     */
+    public function getLoginUrl($scope = [self::SCOPE_PUBLIC_CONTENT]): string
+    {
+        if (is_array($scope) && count(array_intersect($scope, $this->getScopes())) === count($scope)) {
+            return vsprintf(self::LOGIN_URL_PATTERN, $this->getLoginParams($scope));
+        } else {
+            $message = 'Error: getLoginUrl() - The parameter isn\'t an array or invalid scope permissions used.';
+            throw new InstagramException($message);
+        }
+    }
+
+    /**
+     * @param $scope
+     *
+     * @return array
+     */
+    private function getLoginParams($scope): array
+    {
+        $params = [
+            self::API_OAUTH_URL,
+            $this->getConfig()->getApiKey(),
+            urlencode($this->getConfig()->getApiCallback()),
+            implode('+', $scope),
+            self::DEFAULT_RESPONSE_TYPE,
+        ];
+
+        return $params;
+    }
+
+    /**
+     * @param string $code
+     *
+     * @return LoginDataEntity
+     */
+    public function createAccessCode(string $code): LoginDataEntity
+    {
+        $loginData = $this->login(self::API_OAUTH_TOKEN_URL, $code);
+
+        return new LoginDataEntity($loginData);
+    }
+
+    /**
      * The OAuth call operator
      *
      * @param string $apiUrl
@@ -125,9 +179,9 @@ class InstagramRequester implements Requester
     public function login(string $apiUrl, string $code): array
     {
         $apiData = [
-            'client_id'     => $this->getRequest()->getApiKey(),
-            'client_secret' => $this->getRequest()->getApiSecret(),
-            'redirect_uri'  => $this->getRequest()->getCallbackUrl(),
+            'client_id'     => $this->getConfig()->getApiKey(),
+            'client_secret' => $this->getConfig()->getApiSecret(),
+            'redirect_uri'  => $this->getConfig()->getApiCallback(),
             'grant_type'    => Requester::DEFAULT_GRANT_TYPE,
             'code'          => $code,
         ];
@@ -175,8 +229,48 @@ class InstagramRequester implements Requester
     private function signHeader(): string
     {
         $ipAddress = $_SERVER['SERVER_ADDR'];
-        $signature = hash_hmac('sha256', $ipAddress, $this->getRequest()->getApiSecret());
+        $signature = hash_hmac('sha256', $ipAddress, $this->getConfig()->getApiSecret());
 
         return join('|', [$ipAddress, $signature]);
+    }
+
+    /**
+     * @return array
+     */
+    protected function getScopes(): array
+    {
+        return $this->scopes;
+    }
+
+    /**
+     * @return BaseConfig
+     */
+    public function getConfig(): BaseConfig
+    {
+        return $this->config;
+    }
+
+    /**
+     * @param BaseConfig $config
+     */
+    public function setConfig(BaseConfig $config)
+    {
+        $this->config = $config;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAccessToken(): string
+    {
+        return $this->accessToken;
+    }
+
+    /**
+     * @param string $accessToken
+     */
+    public function setAccessToken(string $accessToken)
+    {
+        $this->accessToken = $accessToken;
     }
 }

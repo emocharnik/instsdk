@@ -3,8 +3,6 @@
 namespace InstagramAppTest\Request;
 
 use InstagramApp\Core\Interfaces\Requester;
-use InstagramApp\Model\BaseConfig;
-use InstagramApp\Model\Media\Collection\MediaCollection;
 use InstagramApp\Model\User\UserExtendedEntity;
 use InstagramApp\Request\User;
 use PHPUnit\Framework\TestCase;
@@ -17,7 +15,8 @@ class UserTest extends TestCase
 {
     public function testGetUser()
     {
-        $id = 1;
+        $id     = 1;
+        $action = 'users/' . $id;
 
         $response = [
             'id'              => $id,
@@ -32,20 +31,18 @@ class UserTest extends TestCase
             ],
         ];
 
-        $config = $this->createMock(BaseConfig::class);
-
+        /** @var Requester | \PHPUnit_Framework_MockObject_MockObject $requester */
         $requester = $this->createMock(Requester::class);
         $requester->expects($this->once())
             ->method('makeRequest')
-            ->with($id, 'GET', false, [])
+            ->with($action, 'GET', [])
             ->willReturn(['data' => $response]);
 
-        $resource = new User($config, $requester);
+        $resource = new User($requester);
         $user     = $resource->getUser($id);
 
         $this->assertInstanceOf(UserExtendedEntity::class, $user);
         $this->assertEquals($id, $user->getId());
-
     }
 
     public function testGetUserSelf()
@@ -62,17 +59,14 @@ class UserTest extends TestCase
             ],
         ];
 
-        $token  = 'token';
-        $config = $this->createMock(BaseConfig::class);
-
+        /** @var Requester | \PHPUnit_Framework_MockObject_MockObject $requester */
         $requester = $this->createMock(Requester::class);
         $requester->expects($this->once())
             ->method('makeRequest')
-            ->with('self', 'GET', true, [])
+            ->with('users/self', 'GET', [])
             ->willReturn(['data' => $response]);
 
-        $resource = new User($config, $requester);
-        $resource->setAccessToken($token);
+        $resource = new User($requester);
 
         $user = $resource->getUser();
 

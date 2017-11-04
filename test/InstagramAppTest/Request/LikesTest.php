@@ -3,7 +3,6 @@
 namespace InstagramAppTest\Request;
 
 use InstagramApp\Core\Interfaces\Requester;
-use InstagramApp\Model\BaseConfig;
 use InstagramApp\Model\User\Like\UserLikeEntity;
 use InstagramApp\Model\User\Like\UsersLikeCollection;
 use InstagramApp\Request\Likes;
@@ -17,7 +16,9 @@ class LikesTest extends TestCase
 {
     public function testGetMediaLikes()
     {
-        $id = 1;
+        $id     = 1;
+        $action = 'media/' . $id . '/likes';
+        $params = [];
 
         $user = [
             'id'         => $id,
@@ -29,18 +30,14 @@ class LikesTest extends TestCase
 
         $users = ['data' => [$user]];
 
-        $config    = $this->createMock(BaseConfig::class);
+        /** @var Requester | \PHPUnit_Framework_MockObject_MockObject $requester */
         $requester = $this->createMock(Requester::class);
-        $action    = $id . '/likes';
-        $auth      = true;
-        $params    = [];
-
         $requester->expects($this->once())
             ->method('makeRequest')
-            ->with($action, 'GET', $auth, $params)
+            ->with($action, 'GET', $params)
             ->willReturn($users);
 
-        $resource = new Likes($config, $requester);
+        $resource = new Likes($requester);
         $likes    = $resource->getMediaLikes($id);
 
         $this->assertInstanceOf(UsersLikeCollection::class, $likes);
@@ -53,22 +50,20 @@ class LikesTest extends TestCase
 
     public function testLikeMedia()
     {
-        $id = 1;
+        $id     = 1;
+        $action = 'media/' . $id . '/likes';
+        $params = [];
 
         $response = ['meta' => ['code' => 200]];
 
-        $config    = $this->createMock(BaseConfig::class);
+        /** @var Requester | \PHPUnit_Framework_MockObject_MockObject $requester */
         $requester = $this->createMock(Requester::class);
-        $action    = $id . '/likes';
-        $auth      = true;
-        $params    = [];
-
         $requester->expects($this->once())
             ->method('makeRequest')
-            ->with($action, 'POST', $auth, $params)
+            ->with($action, 'POST', $params)
             ->willReturn($response);
 
-        $resource = new Likes($config, $requester);
+        $resource = new Likes($requester);
         $likes    = $resource->likeMedia($id);
 
         $this->assertTrue($likes);
@@ -76,22 +71,19 @@ class LikesTest extends TestCase
 
     public function testDeleteLikeMedia()
     {
-        $id = 1;
-
+        $id       = 1;
+        $action   = 'media/' . $id . '/likes';
+        $params   = [];
         $response = ['meta' => ['code' => 200]];
 
-        $config    = $this->createMock(BaseConfig::class);
+        /** @var Requester | \PHPUnit_Framework_MockObject_MockObject $requester */
         $requester = $this->createMock(Requester::class);
-        $action    = $id . '/likes';
-        $auth      = true;
-        $params    = [];
-
         $requester->expects($this->once())
             ->method('makeRequest')
-            ->with($action, 'DELETE', $auth, $params)
+            ->with($action, 'DELETE', $params)
             ->willReturn($response);
 
-        $resource = new Likes($config, $requester);
+        $resource = new Likes($requester);
         $likes    = $resource->deleteLikedMedia($id);
 
         $this->assertTrue($likes);

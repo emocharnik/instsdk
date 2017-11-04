@@ -3,7 +3,6 @@
 namespace InstagramApp\Core;
 
 use InstagramApp\Core\Interfaces\Requester;
-use InstagramApp\Model\BaseConfig;
 
 /**
  * Class Request
@@ -11,27 +10,9 @@ use InstagramApp\Model\BaseConfig;
  */
 abstract class Request
 {
-    const SCOPE_PUBLIC_CONTENT = 'public_content';
-    const SCOPE_LIKES          = 'likes';
-
     const RESPONSE_CODE_COMPLETED = 200;
 
     private const ID_SELF = 'self';
-
-    /** @var bool */
-    protected $authRequired = false;
-
-    /** @var string */
-    private $accessToken;
-
-    /** @var string */
-    private $apiKey;
-
-    /** @var string */
-    private $apiSecret;
-
-    /** @var string */
-    private $callbackUrl;
 
     /** @var string */
     protected $controllerName;
@@ -39,121 +20,28 @@ abstract class Request
     /** @var Requester */
     protected $requester;
 
-    /** @var bool */
-    private $signedHeader = false;
-
-    /**
-     * Available scopes
-     *
-     * @var array
-     */
-    private $scopes = [
-        self::SCOPE_PUBLIC_CONTENT,
-        self::SCOPE_LIKES,
-    ];
-
     /**
      * Default constructor
      *
-     * @param BaseConfig $config Instagram configuration data
-     * @param Requester  $requester
+     * @param Requester $requester
      */
-    public function __construct(BaseConfig $config, Requester $requester)
+    public function __construct(Requester $requester)
     {
-        if (!$config->isOnlyPublicAccess()) {
-            // if you want to access user data
-            $this->setApiKey($config->getApiKey());
-            $this->setApiSecret($config->getApiSecret());
-            $this->setCallbackUrl($config->getApiCallback());
-        } else {
-            // if you only want to access public data
-            $this->setApiKey($config->getApiKey());
-        }
-
         $this->setRequester($requester);
-        $requester->setRequest($this);
     }
 
     /**
      * @param mixed  $action
      * @param array  $params
-     * @param bool   $auth
-     *
      * @param string $method
      *
      * @return array
      */
-    public function makeRequest(
-        $action,
-        array $params = [],
-        bool $auth = true,
-        string $method = Requester::REQUEST_TYPE_GET
-    ): array {
-        return $this->getRequester()->makeRequest($action, $method, $auth, $params);
-    }
-
-    /**
-     * @return string
-     */
-    public function getAccessToken(): string
+    public function makeRequest($action, array $params = [], string $method = Requester::REQUEST_TYPE_GET): array
     {
-        return $this->accessToken;
-    }
+        $controllerAction = $this->getController() . '/' . $action;
 
-    /**
-     * @param string $accessToken
-     */
-    public function setAccessToken(string $accessToken)
-    {
-        $this->accessToken = $accessToken;
-    }
-
-    /**
-     * @return string
-     */
-    public function getApiKey(): string
-    {
-        return $this->apiKey;
-    }
-
-    /**
-     * @param string $apiKey
-     */
-    public function setApiKey(string $apiKey)
-    {
-        $this->apiKey = $apiKey;
-    }
-
-    /**
-     * @return string
-     */
-    public function getApiSecret(): string
-    {
-        return $this->apiSecret;
-    }
-
-    /**
-     * @param string $apiSecret
-     */
-    public function setApiSecret(string $apiSecret)
-    {
-        $this->apiSecret = $apiSecret;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCallbackUrl(): string
-    {
-        return $this->callbackUrl;
-    }
-
-    /**
-     * @param string $callbackUrl
-     */
-    public function setCallbackUrl(string $callbackUrl)
-    {
-        $this->callbackUrl = $callbackUrl;
+        return $this->getRequester()->makeRequest($controllerAction, $method, $params);
     }
 
     /**
@@ -168,23 +56,6 @@ abstract class Request
 
         return $this->controllerName;
     }
-
-    /**
-     * @return bool
-     */
-    public function isSignedHeader(): bool
-    {
-        return $this->signedHeader;
-    }
-
-    /**
-     * @param bool $signedHeader
-     */
-    public function setSignedHeader(bool $signedHeader)
-    {
-        $this->signedHeader = $signedHeader;
-    }
-
 
     /**
      * @return Requester
@@ -208,39 +79,14 @@ abstract class Request
     }
 
     /**
-     * @return array
-     */
-    protected function getScopes(): array
-    {
-        return $this->scopes;
-    }
-
-    /**
-     * @return bool
-     */
-    protected function isAuthRequired(): bool
-    {
-        return $this->authRequired;
-    }
-
-    /**
-     * @param bool $authRequired
-     */
-    protected function setAuthRequired(bool $authRequired)
-    {
-        $this->authRequired = $authRequired;
-    }
-
-    /**
      * @param $id
      *
      * @return string
      */
     protected function resolveUserId($id): string
     {
-        if ($id === 0 && $this->getAccessToken()) {
+        if ($id === 0) {
             $id = self::ID_SELF;
-            $this->setAuthRequired(true);
         }
 
         return $id;

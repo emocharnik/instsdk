@@ -2,7 +2,7 @@
 
 namespace InstagramApp\Core\Interfaces;
 
-use InstagramApp\Core\Request;
+use InstagramApp\Model\User\Login\LoginDataEntity;
 
 /**
  * Interface Requester
@@ -10,35 +10,35 @@ use InstagramApp\Core\Request;
  */
 interface Requester
 {
+    const DEFAULT_GRANT_TYPE = 'authorization_code';
+
     const REQUEST_TYPE_DELETE = 'DELETE';
     const REQUEST_TYPE_GET    = 'GET';
     const REQUEST_TYPE_POST   = 'POST';
 
-    const DEFAULT_GRANT_TYPE = 'authorization_code';
+    const SCOPE_LIKES          = 'likes';
+    const SCOPE_PUBLIC_CONTENT = 'public_content';
 
     /**
      * @param string $action
      * @param string $method
-     *
-     * @param bool   $auth
      * @param array  $params
      *
      * @return array
      */
-    public function makeRequest(string $action, string $method, bool $auth = false, array $params = []): array;
+    public function makeRequest(string $action, string $method, array $params = []): array;
 
     /**
-     * @param string $apiUrl
      * @param string $code
      *
-     * @return array
-     * @internal param array $apiData
-     *
+     * @return LoginDataEntity
      */
-    public function login(string $apiUrl, string $code): array;
+    public function createAccessCode(string $code): LoginDataEntity;
 
     /**
-     * @param Request $request
+     * @param array $scope
+     *
+     * @return mixed
      */
-    public function setRequest(Request $request);
+    public function getLoginUrl($scope = [self::SCOPE_PUBLIC_CONTENT]);
 }
