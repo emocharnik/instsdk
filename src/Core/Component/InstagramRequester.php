@@ -2,6 +2,8 @@
 
 namespace InstagramApp\Core\Component;
 
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Uri;
 use InstagramApp\Core\InstagramException;
 use InstagramApp\Core\Interfaces\Requester;
 use InstagramApp\Model\BaseConfig;
@@ -62,47 +64,7 @@ class InstagramRequester implements Requester
      */
     public function makeRequest(string $action, string $method, array $params = []): array
     {
-        if ($this->getConfig()->isOnlyPublicAccess()) {
-            // if the call doesn't requires authentication
-            $authMethod = '?client_id=' . $this->getConfig()->getApiKey();
-        } else {
-            // if the call needs an authenticated user
-            if ($this->getAccessToken()) {
-                $authMethod = '?access_token=' . $this->getAccessToken();
-            } else {
-                $str = "Error: makeRequest() | $action - This method requires an authenticated users access token.";
-                throw new InstagramException($str);
-            }
-        }
-
-        $paramString = '';
-
-        if (!empty($params) && is_array($params)) {
-            $paramString = '&' . http_build_query($params);
-        }
-
-        $apiCall = $this->composeUrl($action, $method, $authMethod, $paramString);
-
-        // signed header of POST/DELETE requests
-        $headerData = ['Accept: application/json'];
-
-        if (self::REQUEST_TYPE_DELETE == $method) {
-            $headerData[] = 'X-Insta-Forwarded-For: ' . $this->signHeader();
-        }
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $apiCall);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headerData);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 20);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-
-        if (self::REQUEST_TYPE_POST === $method) {
-            curl_setopt($ch, CURLOPT_POST, count($params));
-            curl_setopt($ch, CURLOPT_POSTFIELDS, ltrim($paramString, '&'));
-        } elseif (self::REQUEST_TYPE_DELETE === $method) {
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, self::REQUEST_TYPE_DELETE);
-        }
+        $request = $this->getRequest($action, $method, $params);
 
         $jsonData = curl_exec($ch);
 
@@ -208,14 +170,48 @@ class InstagramRequester implements Requester
     /**
      * @param string $function
      * @param string $method
-     * @param string $authMethod
-     * @param string $paramString
+     * @param array  $params
      *
      * @return string
+     * @throws InstagramException
      */
-    private function composeUrl(string $function, string $method, string $authMethod, string $paramString): string
+    private function getRequest(string $function, string $method, array $params): string
     {
-        $params  = (Requester::REQUEST_TYPE_GET === $method) ? $paramString : null;
+        if ($this->getConfig()->isOnlyPublicAccess()) {
+            // if the call doesn't requires authentication
+            $authMethod = '?client_id=' . $this->getConfig()->getApiKey();
+        } else {
+            // if the call needs an authenticated user
+            if ($this->getAccessToken()) {
+                $authMethod = '?access_token=' . $this->getAccessToken();
+            } else {
+                $str = "Error: makeRequest() | $function - This method requires an authenticated users access token.";
+                throw new InstagramException($str);
+            }
+        }
+
+        if (!empty($params) && is_array($params)) {
+            $params = '&' . http_build_query($params);
+        }
+
+        // signed header of POST/DELETE requests
+        $headerData = ['Accept: application/json'];
+
+        if (self::REQUEST_TYPE_DELETE == $method) {
+            $headerData[] = 'X-Insta-Forwarded-For: ' . $this->signHeader();
+        }
+
+        $params = (Requester::REQUEST_TYPE_GET === $method) ? $params : null;
+
+        if (self::REQUEST_TYPE_POST === $method) {
+            curl_setopt($ch, CURLOPT_POSTFIELDS, ltrim($paramString, '&'));
+        } else if (self::REQUEST_TYPE_DELETE === $method) {
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, self::REQUEST_TYPE_DELETE);
+        }
+
+        $uri     = new Uri(self::API_URL);
+        $request = new Request($method, $uri, $headerData, ltrim($params, '&'));
+
         $apiCall = self::API_URL . $function . $authMethod . $params;
 
         return $apiCall;
